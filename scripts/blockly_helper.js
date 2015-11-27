@@ -197,15 +197,10 @@ function load_by_url(uri) {
 　　ajax.send ("");
 }
 
-function uploadCode(code, callback) {
+function uploadCode(device_id, code, callback) {
     var target = document.getElementById('content_arduino');
     var spinner = new Spinner().spin(target);
 
-    var url = "http://127.0.0.1:8080/";
-    var method = "POST";
-
-    // You REALLY want async = true.
-    // Otherwise, it'll block ALL execution waiting for server response.
     var async = true;
 
     var request = new XMLHttpRequest();
@@ -242,17 +237,17 @@ function uploadCode(code, callback) {
         callback(status, errorInfo);
     };
 
-    request.open(method, url, async);
+    request.open("POST", "/upload?id=" + device_id, async);
     request.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
-    request.send(code);	     
+    request.send(code);
 }
 
 function uploadClick() {
-    var code = document.getElementById('content_arduino').value;
-
-    alert("Ready to upload to Arduino.");
+    var device_id_element = document.getElementById('photon_device')
+    var device_id = device_id_element.options[device_id_element.selectedIndex].value;
+    var code = Blockly.Arduino.workspaceToCode();
     
-    uploadCode(code, function(status, errorInfo) {
+    uploadCode(device_id, code, function(status, errorInfo) {
         if (status == 200) {
             alert("Program uploaded ok");
         } else {

@@ -13,3 +13,5 @@ ino_project
 # Python byte-compiled / optimized
 __pycache__/
 *.py[cod]
+client_secrets.json
+lib/

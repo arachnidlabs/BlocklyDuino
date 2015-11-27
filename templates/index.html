@@ -2,14 +2,14 @@
 <head>
   <meta charset="utf-8">
   <title>BlocklyDuino</title>
-  <script type="text/javascript" src="../../blockly_compressed.js"></script>
-  <script type="text/javascript" src="../../blocks_compressed.js"></script>
-  <script type="text/javascript" src="../../arduino_compressed.js"></script>
-  <script type="text/javascript" src="../../msg/js/en.js"></script>
-  <script type="text/javascript" src="Blob.js"></script>
-  <script type="text/javascript" src="spin.js"></script>
-  <script type="text/javascript" src="FileSaver.min.js"></script>
-  <script type="text/javascript" src="blockly_helper.js"></script>
+  <script type="text/javascript" src="/blockly/blockly_compressed.js"></script>
+  <script type="text/javascript" src="/blockly/blocks_compressed.js"></script>
+  <script type="text/javascript" src="/blockly/arduino_compressed.js"></script>
+  <script type="text/javascript" src="/blockly/msg/js/en.js"></script>
+  <script type="text/javascript" src="/scripts/Blob.js"></script>
+  <script type="text/javascript" src="/scripts/spin.js"></script>
+  <script type="text/javascript" src="/scripts/FileSaver.min.js"></script>
+  <script type="text/javascript" src="/scripts/blockly_helper.js"></script>
   <script>
 
 /**
@@ -161,7 +161,7 @@ function init() {
            length: 3,
            colour: '#ccc',
            snap: true},
-       media: '../../media/',
+       media: '/blockly/media/',
        toolbox: toolbox});
 
   auto_save_and_restore_blocks();
@@ -297,14 +297,13 @@ function init() {
             <td class="tabmin">&nbsp;</td>
             <td id="tab_xml" class="taboff" onclick="tabClick('xml')">XML</td>
             <td class="tabmax">
+              <select id="photon_device">
+                {% for device in devices %}
+                  <option value="{{device.id}}">{{device.name}}</option>
+                {% endfor %}
+              </select>
               <button type="button" onclick="uploadClick()">Upload</button>
-              <button type="button" onclick="resetClick()">Reset</button>
               <button onclick="discard()">Discard</button>
-              <button onclick="saveCode()">Save Arduino Code</button>
-              <button onclick="save()">Save XML</button>
-              <button id="fakeload">Load XML</button>
-              <input type="file" id="load" style="display: none;"/>
-              <!--button class="launch" onclick="runJS()">Run Program</button-->
             </td>
           </tr>
         </table>
