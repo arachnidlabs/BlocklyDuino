@@ -93,10 +93,6 @@ function getBBox_(element) {
  * Initialize Blockly.  Called on page load.
  */
 function init() {
-  //window.onbeforeunload = function() {
-  //  return 'Leaving this page will result in the loss of your work.';
-  //};
-
   var container = document.getElementById('content_area');
   var onresize = function(e) {
     var bBox = getBBox_(container);
