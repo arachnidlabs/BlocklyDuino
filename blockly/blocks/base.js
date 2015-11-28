@@ -63,19 +63,6 @@ Blockly.Blocks['base_map'] = {
   }
 };
 
-Blockly.Blocks['inout_buildin_led'] = {
-   helpUrl: 'http://arduino.cc/en/Reference/DigitalWrite',
-   init: function() {
-     this.setColour(190);
-     this.appendDummyInput()
-	       .appendField("Build-in LED Stat")
-	       .appendField(new Blockly.FieldDropdown([["HIGH", "HIGH"], ["LOW", "LOW"]]), "STAT");
-     this.setPreviousStatement(true, null);
-     this.setNextStatement(true, null);
-     this.setTooltip('light or off the build-in LED');
-   }
-};
-
 Blockly.Blocks['inout_digital_write'] = {
   helpUrl: 'http://arduino.cc/en/Reference/DigitalWrite',
   init: function() {
@@ -138,7 +125,7 @@ Blockly.Blocks['inout_tone'] = {
     this.setColour(230);
     this.appendDummyInput()
         .appendField("Tone PIN#")
-        .appendField(new Blockly.FieldDropdown(profile.default.digital), "PIN");
+        .appendField(new Blockly.FieldDropdown(profile.default.pwm), "PIN");
     this.appendValueInput("NUM", "Number")
         .appendField("frequency")
         .setCheck("Number");
@@ -155,7 +142,7 @@ Blockly.Blocks['inout_notone'] = {
     this.setColour(230);
     this.appendDummyInput()
         .appendField("No tone PIN#")
-        .appendField(new Blockly.FieldDropdown(profile.default.digital), "PIN");
+        .appendField(new Blockly.FieldDropdown(profile.default.pwm), "PIN");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -174,17 +161,14 @@ Blockly.Blocks['inout_highlow'] = {
   }
 };
 
-//servo block
-//http://www.seeedstudio.com/depot/emax-9g-es08a-high-sensitive-mini-servo-p-760.html?cPath=170_171
 Blockly.Blocks['servo_move'] = {
   helpUrl: 'http://www.arduino.cc/playground/ComponentLib/servo',
   init: function() {
     this.setColour(190);
     this.appendDummyInput()
         .appendField("Servo")
-        .appendField(new Blockly.FieldImage("http://www.seeedstudio.com/depot/images/product/a991.jpg", 64, 64))
         .appendField("PIN#")
-        .appendField(new Blockly.FieldDropdown(profile.default.digital), "PIN")
+        .appendField(new Blockly.FieldDropdown(profile.default.pwm), "PIN")
     this.appendValueInput("DEGREE", 'Number')
         .setCheck('Number')
         .setAlign(Blockly.ALIGN_RIGHT)
@@ -201,9 +185,8 @@ Blockly.Blocks['servo_read_degrees'] = {
     this.setColour(190);
     this.appendDummyInput()
         .appendField("Servo")
-        .appendField(new Blockly.FieldImage("http://www.seeedstudio.com/depot/images/product/a991.jpg", 64, 64))
         .appendField("PIN#")
-        .appendField(new Blockly.FieldDropdown(profile.default.digital), "PIN");
+        .appendField(new Blockly.FieldDropdown(profile.default.pwm), "PIN");
     this.appendDummyInput()
         .setAlign(Blockly.ALIGN_RIGHT)
         .appendField("Read Degrees")
