@@ -17,7 +17,7 @@ function runJS() {
 function backup_blocks() {
   if ('localStorage' in window) {
     var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-    window.localStorage.setItem('arduino', Blockly.Xml.domToText(xml));
+    window.localStorage.setItem('code', Blockly.Xml.domToText(xml));
   }
 }
 
@@ -25,8 +25,8 @@ function backup_blocks() {
  * Restore code blocks from localStorage.
  */
 function restore_blocks() {
-  if ('localStorage' in window && window.localStorage.arduino) {
-    var xml = Blockly.Xml.textToDom(window.localStorage.arduino);
+  if ('localStorage' in window && window.localStorage.code) {
+    var xml = Blockly.Xml.textToDom(window.localStorage.code);
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
   }
 }
@@ -198,7 +198,7 @@ function load_by_url(uri) {
 }
 
 function uploadCode(device_id, code, callback) {
-    var target = document.getElementById('content_arduino');
+    var target = document.getElementById('content_code');
     var spinner = new Spinner().spin(target);
 
     var async = true;

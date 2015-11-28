@@ -16,7 +16,7 @@
  * List of tab names.
  * @private
  */
-var TABS_ = ['blocks', 'arduino', 'xml'];
+var TABS_ = ['blocks', 'code'];
 
 var selected = 'blocks';
 
@@ -25,27 +25,6 @@ var selected = 'blocks';
  * @param {string} clickedName Name of tab clicked.
  */
 function tabClick(clickedName) {
-  // If the XML tab was open, save and render the content.
-  if (document.getElementById('tab_xml').className == 'tabon') {
-    var xmlTextarea = document.getElementById('content_xml');
-    var xmlText = xmlTextarea.value;
-    var xmlDom = null;
-    try {
-      xmlDom = Blockly.Xml.textToDom(xmlText);
-    } catch (e) {
-      var q =
-          window.confirm('Error parsing XML:\n' + e + '\n\nAbandon changes?');
-      if (!q) {
-        // Leave the user on the XML tab.
-        return;
-      }
-    }
-    if (xmlDom) {
-      Blockly.mainWorkspace.clear();
-      Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDom);
-    }
-  }
-
   if (document.getElementById('tab_blocks').className == 'tabon') {
     Blockly.mainWorkspace.setVisible(false);
   }
@@ -79,23 +58,10 @@ function renderContent() {
     // If the workspace was changed by the XML tab, Firefox will have performed
     // an incomplete rendering due to Blockly being invisible.  Rerender.
     Blockly.mainWorkspace.render();
-  } else if (content.id == 'content_xml') {
-    var xmlTextarea = document.getElementById('content_xml');
-    var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-    var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
-    xmlTextarea.value = xmlText;
-    xmlTextarea.focus();
-  /*} else if (content.id == 'content_javascript') {
-    content.innerHTML = Blockly.JavaScript.workspaceToCode();
-  } else if (content.id == 'content_dart') {
-    content.innerHTML = Blockly.Dart.workspaceToCode();
-  } else if (content.id == 'content_python') {
-    content.innerHTML = Blockly.Python.workspaceToCode();*/
-  } else if (content.id == 'content_arduino') {
-    //content.innerHTML = Blockly.Arduino.workspaceToCode();
-    var arduinoTextarea = document.getElementById('content_arduino');
-    arduinoTextarea.value = Blockly.Arduino.workspaceToCode();
-    arduinoTextarea.focus();
+  } else if (content.id == 'content_code') {
+    var codeTextarea = document.getElementById('content_code');
+    codeTextarea.value = Blockly.Arduino.workspaceToCode();
+    codeTextarea.focus();
   }
 }
 
@@ -246,13 +212,6 @@ function init() {
     .blocklySvg {
       border-top: none !important;
     }
-    #content_xml {
-      resize: none;
-      outline: none;
-      border: none;
-      font-family: monospace;
-      overflow: scroll;
-    }
     button {
       padding: 1px 1em;
       font-size: 90%;
@@ -278,7 +237,7 @@ function init() {
   <table height="100%" width="100%">
     <tr>
       <td>
-        <h1><a href="https://github.com/gasolin/BlocklyDuino/wiki">BlocklyDuino</a> &gt; web-based visual programming editor for arduino</h1>
+        <h1><a href="https://github.com/arachnidlabs/BlocklyDuino/wiki">Photonduino</a> &gt; web-based visual programming editor for Particle Photon</h1>
       </td>
     </tr>
     <tr>
@@ -287,15 +246,7 @@ function init() {
           <tr id="tabRow" height="1em">
             <td id="tab_blocks" class="tabon" onclick="tabClick('blocks')">Blocks</td>
             <td class="tabmin">&nbsp;</td>
-            <!--td id="tab_javascript" class="taboff" onclick="tabClick(this.id)">JavaScript</td>
-            <td class="tabmin">&nbsp;</td-->
-            <!--td id="tab_dart" class="taboff" onclick="tabClick(this.id)">Dart</td>
-            <td class="tabmin">&nbsp;</td>
-            <td id="tab_python" class="taboff" onclick="tabClick(this.id)">Python</td>
-            <td class="tabmin">&nbsp;</td-->
-            <td id="tab_arduino" class="taboff" onclick="tabClick('arduino')">Arduino</td>
-            <td class="tabmin">&nbsp;</td>
-            <td id="tab_xml" class="taboff" onclick="tabClick('xml')">XML</td>
+            <td id="tab_code" class="taboff" onclick="tabClick('code')">Code</td>
             <td class="tabmax">
               <select id="photon_device">
                 {% for device in devices %}
@@ -314,8 +265,7 @@ function init() {
     </tr>
   </table>
   <div id="content_blocks" class="content"></div>
-  <textarea id="content_arduino" class="content" readonly wrap="off"></textarea>
-  <textarea id="content_xml" class="content" wrap="off"></textarea>
+  <textarea id="content_code" class="content" readonly wrap="off"></textarea>
 
   <xml id="toolbox" style="display: none">
     <category name="Logic">
