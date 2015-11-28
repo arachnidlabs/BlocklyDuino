@@ -246,7 +246,21 @@ function init() {
             <td class="tabmax">
               <select id="photon_device">
                 {% for device in devices %}
-                  <option value="{{device.id}}">{{device.name}}</option>
+                  <option value="{{device.id}}">
+                    {{device.name}} -
+                    {% if device.product_id == 0 %}
+                      core,
+                    {% elif device.product_id == 6 %}
+                      photon,
+                    {% else %}
+                      unknown,
+                    {% endif %}
+                    {% if device.connected %}
+                      online
+                    {% else %}
+                      offline
+                    {% endif %}
+                  </option>
                 {% endfor %}
               </select>
               <button type="button" onclick="uploadClick()">Upload</button>

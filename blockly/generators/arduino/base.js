@@ -34,6 +34,13 @@ Blockly.Arduino.base_delay = function() {
   return code;
 };
 
+Blockly.Arduino.base_map = function() {
+  var value_num = Blockly.Arduino.valueToCode(this, 'NUM', Blockly.Arduino.ORDER_NONE);
+  var value_dmax = Blockly.Arduino.valueToCode(this, 'DMAX', Blockly.Arduino.ORDER_ATOMIC);
+  var code = 'map(' + value_num + ', 0, 1024, 0, ' + value_dmax + ')';
+  return [code, Blockly.Arduino.ORDER_NONE];
+};
+
 Blockly.Arduino.inout_digital_write = function() {
   var dropdown_pin = this.getFieldValue('PIN');
   var dropdown_stat = this.getFieldValue('STAT');
