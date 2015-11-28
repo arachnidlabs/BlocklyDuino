@@ -119,7 +119,7 @@ function load_by_url(uri) {
 　　ajax.send ("");
 }
 
-function uploadCode(device_id, code, callback) {
+function uploadCode(device_id, code, state, callback) {
     var target = document.getElementById('content_code');
     var spinner = new Spinner().spin(target);
 
@@ -159,17 +159,17 @@ function uploadCode(device_id, code, callback) {
         callback(status, errorInfo);
     };
 
-    request.open("POST", "/upload?id=" + device_id, async);
+    request.open("POST", "/upload?id=" + device_id + "&state=" + state, async);
     request.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
     request.send(code);
 }
 
-function uploadClick() {
+function uploadClick(state) {
     var device_id_element = document.getElementById('photon_device')
     var device_id = device_id_element.options[device_id_element.selectedIndex].value;
     var code = Blockly.Arduino.workspaceToCode();
     
-    uploadCode(device_id, code, function(status, errorInfo) {
+    uploadCode(device_id, code, state, function(status, errorInfo) {
         if (status == 200) {
             alert("Program uploaded ok");
         } else {

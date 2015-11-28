@@ -51,7 +51,32 @@ def get_credentials(request):
     return credentials
 
 
+def set_csrf_cookie(fun):
+    def decorate(self, *args, **kwargs):
+        if 'state' not in self.request.cookies:
+            self.csrf_token = os.urandom(16).encode('hex')
+            self.response.set_cookie('state', self.csrf_token)
+        else:
+            self.csrf_token = self.request.cookies['state']
+        return fun(self, *args, **kwargs)
+    return decorate
+
+
+def check_csrf_cookie(fun):
+    def decorate(self, *args, **kwargs):
+        if 'state' not in self.request.cookies or 'state' not in self.request.GET:
+            self.response.write("No state token found")
+            self.response.status = 400
+            return
+        elif self.request.cookies['state'] != self.request.GET['state']:
+            self.response.write("Invalid state token")
+            self.response.status = 400
+        else:
+            return fun(self, *args, **kwargs)
+    return decorate
+
 class MainHandler(webapp2.RequestHandler):
+    @set_csrf_cookie
     def get(self):
         logging.info(repr(flow.client_secret))
         credentials = get_credentials(self.request)
@@ -67,6 +92,7 @@ class MainHandler(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('index.html')
         template_args = {
             'devices': devices,
+            'state': self.csrf_token,
         }
         self.response.write(template.render(template_args))
 
@@ -87,6 +113,7 @@ def make_multipart(parts):
 
 
 class UploadHandler(webapp2.RequestHandler):
+    @check_csrf_cookie
     def post(self):
         credentials = get_credentials(self.request)
         if not credentials:
