@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+import datetime
+import httplib2
 import jinja2
 import json
 import logging
@@ -21,8 +23,8 @@ import mimetools
 import os
 import webapp2
 
-
-from oauth2client import appengine
+from oauth2client.client import flow_from_clientsecrets, AccessTokenCredentials
+from webapp2_extras import securecookie
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -30,15 +32,34 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
 CLIENT_SECRETS = os.path.join(os.path.dirname(__file__), 'client_secrets.json')
-decorator = appengine.oauth2decorator_from_clientsecrets(
+flow = flow_from_clientsecrets(
     CLIENT_SECRETS,
-    scope='blocklyphoton')
+    scope='blocklyphoton',
+    redirect_uri="https://blocklyphoton.appspot.com/authorize")
+cookiecrypt = securecookie.SecureCookieSerializer(flow.client_secret.decode('hex'))
+
+
+def get_credentials(request):
+    authcookie = None
+    if 'auth' in request.cookies:
+        authcookie = cookiecrypt.deserialize('auth', request.cookies['auth'])
+
+    if not authcookie or 'auth' not in authcookie:
+        return None
+
+    credentials = AccessTokenCredentials(authcookie['auth'], 'blocklyphoton/1.0')
+    return credentials
 
 
 class MainHandler(webapp2.RequestHandler):
-    @decorator.oauth_required
     def get(self):
-        http = decorator.http()
+        logging.info(repr(flow.client_secret))
+        credentials = get_credentials(self.request)
+        if not credentials:
+            self.redirect(flow.step1_get_authorize_url().encode('utf-8'))
+            return
+
+        http = credentials.authorize(httplib2.Http())
         resp, content = http.request("https://api.particle.io/v1/devices", "GET")
         devices = json.loads(content)
         logging.info(devices)
@@ -66,9 +87,9 @@ def make_multipart(parts):
 
 
 class UploadHandler(webapp2.RequestHandler):
-    @decorator.oauth_aware
     def post(self):
-        if not decorator.has_credentials():
+        credentials = get_credentials(self.request)
+        if not credentials:
             self.response.write("No valid OAuth credentials for Particle!")
             self.response.status = 400
             return
@@ -77,8 +98,7 @@ class UploadHandler(webapp2.RequestHandler):
             self.response.status = 400
             return
 
-        logging.info(decorator.credentials.access_token)
-        http = decorator.http()
+        http = credentials.authorize(httplib2.Http())
         boundary, data = make_multipart({
             'file': {
                 'type': 'text/plain', 
@@ -87,7 +107,6 @@ class UploadHandler(webapp2.RequestHandler):
             }
         })
         uri = "https://api.particle.io/v1/devices/%s" % (self.request.GET['id'],)
-        logging.info(data)
         resp, content = http.request(
             uri,
             method="PUT",
@@ -104,8 +123,25 @@ class UploadHandler(webapp2.RequestHandler):
             else:
                 self.response.write("OK")
 
+
+class OauthCallbackHandler(webapp2.RequestHandler):
+    def get(self):
+        credentials = flow.step2_exchange(self.request.GET)
+        if not credentials:
+            self.error(400)
+            self.response.write("Got no credentials back!")
+
+        self.response.set_cookie(
+            "auth",
+            cookiecrypt.serialize("auth", {
+                "auth": credentials.access_token,
+            }),
+            expires=credentials.token_expiry)
+        self.redirect("/")
+
+
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/upload', UploadHandler),
-    (decorator.callback_path, decorator.callback_handler()),
+    ('/oauth2callback', OauthCallbackHandler),
 ], debug=True)
