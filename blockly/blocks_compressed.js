@@ -90,7 +90,26 @@ c=goog.dom.createDom("block",null,c);c.setAttribute("type","variables_get");b.ca
 Blockly.Blocks.controls_forEach={init:function(){this.jsonInit({message0:Blockly.Msg.CONTROLS_FOREACH_TITLE,args0:[{type:"field_variable",name:"VAR",variable:null},{type:"input_value",name:"LIST",check:"Array"}],previousStatement:null,nextStatement:null,colour:Blockly.Blocks.loops.HUE,helpUrl:Blockly.Msg.CONTROLS_FOREACH_HELPURL});this.appendStatementInput("DO").appendField(Blockly.Msg.CONTROLS_FOREACH_INPUT_DO);var a=this;this.setTooltip(function(){return Blockly.Msg.CONTROLS_FOREACH_TOOLTIP.replace("%1",
 a.getFieldValue("VAR"))})},getVars:function(){return[this.getFieldValue("VAR")]},renameVar:function(a,b){Blockly.Names.equals(a,this.getFieldValue("VAR"))&&this.setFieldValue(b,"VAR")},customContextMenu:Blockly.Blocks.controls_for.customContextMenu};
 Blockly.Blocks.controls_flow_statements={init:function(){var a=[[Blockly.Msg.CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK,"BREAK"],[Blockly.Msg.CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE,"CONTINUE"]];this.setHelpUrl(Blockly.Msg.CONTROLS_FLOW_STATEMENTS_HELPURL);this.setColour(Blockly.Blocks.loops.HUE);this.appendDummyInput().appendField(new Blockly.FieldDropdown(a),"FLOW");this.setPreviousStatement(!0);var b=this;this.setTooltip(function(){var a=b.getFieldValue("FLOW");return{BREAK:Blockly.Msg.CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK,
-CONTINUE:Blockly.Msg.CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE}[a]})},onchange:function(){var a=!1,b=this;do{if("controls_repeat"==b.type||"controls_repeat_ext"==b.type||"controls_forEach"==b.type||"controls_for"==b.type||"controls_whileUntil"==b.type){a=!0;break}b=b.getSurroundParent()}while(b);a?this.setWarningText(null):this.setWarningText(Blockly.Msg.CONTROLS_FLOW_STATEMENTS_WARNING)}};Blockly.Blocks.math={};Blockly.Blocks.math.HUE=230;Blockly.Blocks.math_number={init:function(){this.setHelpUrl(Blockly.Msg.MATH_NUMBER_HELPURL);this.setColour(Blockly.Blocks.math.HUE);this.appendDummyInput().appendField(new Blockly.FieldTextInput("0",Blockly.FieldTextInput.numberValidator),"NUM");this.setOutput(!0,"Number");this.setTooltip(Blockly.Msg.MATH_NUMBER_TOOLTIP)}};
+CONTINUE:Blockly.Msg.CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE}[a]})},onchange:function(){var a=!1,b=this;do{if("controls_repeat"==b.type||"controls_repeat_ext"==b.type||"controls_forEach"==b.type||"controls_for"==b.type||"controls_whileUntil"==b.type){a=!0;break}b=b.getSurroundParent()}while(b);a?this.setWarningText(null):this.setWarningText(Blockly.Msg.CONTROLS_FLOW_STATEMENTS_WARNING)}};/*
+
+ Visual Blocks Editor
+
+ Copyright 2015 Nick Johnson.
+ https://github.com/arachnidlabs/BlocklyDuino
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
+Blockly.Blocks.machidobot={};Blockly.Blocks.machidobot_motors={init:function(){this.setColour(190);this.appendDummyInput().appendField("Drive").appendField(new Blockly.FieldDropdown([["forwards","F"],["backwards","B"],["left","L"],["right","R"],["stop","S"]]),"DIR");this.setPreviousStatement(!0,null);this.setNextStatement(!0,null);this.setTooltip("Drive the robot around")}};Blockly.Blocks.math={};Blockly.Blocks.math.HUE=230;Blockly.Blocks.math_number={init:function(){this.setHelpUrl(Blockly.Msg.MATH_NUMBER_HELPURL);this.setColour(Blockly.Blocks.math.HUE);this.appendDummyInput().appendField(new Blockly.FieldTextInput("0",Blockly.FieldTextInput.numberValidator),"NUM");this.setOutput(!0,"Number");this.setTooltip(Blockly.Msg.MATH_NUMBER_TOOLTIP)}};
 Blockly.Blocks.math_arithmetic={init:function(){var a=[[Blockly.Msg.MATH_ADDITION_SYMBOL,"ADD"],[Blockly.Msg.MATH_SUBTRACTION_SYMBOL,"MINUS"],[Blockly.Msg.MATH_MULTIPLICATION_SYMBOL,"MULTIPLY"],[Blockly.Msg.MATH_DIVISION_SYMBOL,"DIVIDE"],[Blockly.Msg.MATH_POWER_SYMBOL,"POWER"]];this.setHelpUrl(Blockly.Msg.MATH_ARITHMETIC_HELPURL);this.setColour(Blockly.Blocks.math.HUE);this.setOutput(!0,"Number");this.appendValueInput("A").setCheck("Number");this.appendValueInput("B").setCheck("Number").appendField(new Blockly.FieldDropdown(a),
 "OP");this.setInputsInline(!0);var b=this;this.setTooltip(function(){var a=b.getFieldValue("OP");return{ADD:Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_ADD,MINUS:Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_MINUS,MULTIPLY:Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_MULTIPLY,DIVIDE:Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_DIVIDE,POWER:Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_POWER}[a]})}};
 Blockly.Blocks.math_single={init:function(){var a=[[Blockly.Msg.MATH_SINGLE_OP_ROOT,"ROOT"],[Blockly.Msg.MATH_SINGLE_OP_ABSOLUTE,"ABS"],["-","NEG"],["ln","LN"],["log10","LOG10"],["e^","EXP"],["10^","POW10"]];this.setHelpUrl(Blockly.Msg.MATH_SINGLE_HELPURL);this.setColour(Blockly.Blocks.math.HUE);this.setOutput(!0,"Number");this.appendValueInput("NUM").setCheck("Number").appendField(new Blockly.FieldDropdown(a),"OP");var b=this;this.setTooltip(function(){var a=b.getFieldValue("OP");return{ROOT:Blockly.Msg.MATH_SINGLE_TOOLTIP_ROOT,
