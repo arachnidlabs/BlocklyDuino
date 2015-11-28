@@ -67,6 +67,14 @@ Blockly.Arduino.ORDER_CONDITIONAL = 13;   // expr ? expr : expr
 Blockly.Arduino.ORDER_ASSIGNMENT = 14;    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
 Blockly.Arduino.ORDER_NONE = 99;          // (...)
 
+function pinmap(pin) {
+  return [pin, pin];
+}
+
+var analog_pins = ["A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "DAC", "WKP"].map(pinmap);
+var digital_pins = ["D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "RX", "TX"].map(pinmap).concat(analog_pins);
+var pwm_pins = ["D0", "D1", "D2", "D3", "A4", "A5", "WKP", "RX", "TX"].map(pinmap);
+
 /*
  * Arduino Board profiles
  *
@@ -74,15 +82,10 @@ Blockly.Arduino.ORDER_NONE = 99;          // (...)
 var profile = {
   arduino: {
     description: "Arduino standard-compatible board",
-    digital: [["D0", "D0"], ["D1", "D1"], ["D2", "D2"], ["D3", "D3"], ["D4", "D4"], ["D5", "D5"], ["D6", "D6"], ["D7", "D7"], ["WKP", "WKP"]],
-    analog: [["A0", "A0"], ["A1", "A1"], ["A2", "A2"], ["A3", "A3"], ["A4", "A4"], ["A5", "A5"], ["A6", "A6"]],
-    serial: 9600
+    digital: digital_pins,
+    analog: analog_pins,
+    pwm: pwm_pins,
   },
-  arduino_mega: {
-    description: "Arduino Mega-compatible board"
-    //53 digital
-    //15 analog
-  }
 };
 //set default profile to arduino standard-compatible board
 profile["default"] = profile["arduino"];
