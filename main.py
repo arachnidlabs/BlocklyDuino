@@ -38,6 +38,18 @@ flow = flow_from_clientsecrets(
     redirect_uri="https://blocklyphoton.appspot.com/authorize")
 cookiecrypt = securecookie.SecureCookieSerializer(flow.client_secret.decode('hex'))
 
+DEFINITIONS = """
+int ultrasonic_distance(int pin) {
+    pinMode(pin, OUTPUT);
+    digitalWrite(pin, LOW);
+    delayMicroseconds(5);
+    digitalWrite(pin, HIGH);
+    delayMicroseconds(5);
+    digitalWrite(pin, LOW);
+    pinMode(pin, INPUT);
+    return pulseIn(pin, HIGH) / 29 / 2;
+}
+"""
 
 def get_credentials(request):
     authcookie = None
@@ -130,7 +142,7 @@ class UploadHandler(webapp2.RequestHandler):
             'file': {
                 'type': 'text/plain', 
                 'filename': 'sketch.ino',
-                'data': self.request.body
+                'data': DEFINITIONS + self.request.body
             }
         })
         uri = "https://api.particle.io/v1/devices/%s" % (self.request.GET['id'],)

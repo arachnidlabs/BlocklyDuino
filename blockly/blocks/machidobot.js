@@ -42,3 +42,15 @@ Blockly.Blocks['machidobot_motors'] = {
     this.setTooltip('Drive the robot around');
   }    
 };
+
+Blockly.Blocks['ultrasonic_ranger'] = {
+  init: function() {
+    this.setColour(190);
+    this.appendDummyInput()
+      .appendField("Ultrasonic Ranger")
+      .appendField("PIN#")
+      .appendField(new Blockly.FieldDropdown(profile.default.digital), "PIN");
+    this.setOutput(true, "Number")
+    this.setTooltip("Ultrasonic distance sensor");
+  }
+};

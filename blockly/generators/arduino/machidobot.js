@@ -52,3 +52,8 @@ Blockly.Arduino.machidobot_motors = function() {
 	}
 	return code;
 }
+
+Blockly.Arduino.ultrasonic_ranger = function() {
+	var pin = this.getFieldValue("PIN");
+	return ["ultrasonic_distance(" + pin + ")", Blockly.Arduino.ORDER_ATOMIC];
+}
