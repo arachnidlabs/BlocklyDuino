@@ -96,5 +96,5 @@ Blockly.Arduino.particle_publish = function() {
 Blockly.Arduino.particle_publish_arg = function() {
 	var name = this.getFieldValue('NAME');
 	var value = Blockly.Arduino.valueToCode(this, 'ARG', Blockly.Arduino.ORDER_ATOMIC);
-	return 'Particle.publish("' + name + '", ' + value + ');\n';
+	return 'Particle.publish("' + name + '", String(' + value + '));\n';
 }
