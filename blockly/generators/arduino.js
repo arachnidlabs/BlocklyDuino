@@ -85,6 +85,7 @@ var profile = {
     digital: digital_pins,
     analog: analog_pins,
     pwm: pwm_pins,
+    serial: '115200',
   },
 };
 //set default profile to arduino standard-compatible board

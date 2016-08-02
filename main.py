@@ -91,14 +91,15 @@ class MainHandler(webapp2.RequestHandler):
     @set_csrf_cookie
     def get(self):
         logging.info(repr(flow.client_secret))
-        credentials = get_credentials(self.request)
-        if not credentials:
-            self.redirect(flow.step1_get_authorize_url().encode('utf-8'))
-            return
+        #credentials = get_credentials(self.request)
+        #if not credentials:
+        #    self.redirect(flow.step1_get_authorize_url().encode('utf-8'))
+        #    return
 
-        http = credentials.authorize(httplib2.Http())
-        resp, content = http.request("https://api.particle.io/v1/devices", "GET")
-        devices = json.loads(content)
+        #http = credentials.authorize(httplib2.Http())
+        #resp, content = http.request("https://api.particle.io/v1/devices", "GET")
+        #devices = json.loads(content)
+        devices = {}
         logging.info(devices)
 
         template = JINJA_ENVIRONMENT.get_template('index.html')

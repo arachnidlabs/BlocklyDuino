@@ -57,3 +57,44 @@ Blockly.Arduino.ultrasonic_ranger = function() {
 	var pin = this.getFieldValue("PIN");
 	return ["ultrasonic_distance(" + pin + ")", Blockly.Arduino.ORDER_ATOMIC];
 }
+
+Blockly.Arduino.particle_variable = function() {
+	var name = this.getFieldValue("VAR");
+	Blockly.Arduino.setups_['setup_particle_variable_' + name] = "Particle.variable(\"" + name + "\", " + name + ");";
+	return "";
+}
+
+Blockly.Arduino.particle_function = function() {
+  // Define a procedure with a return value.
+  var funcName = Blockly.Arduino.variableDB_.getName(this.getFieldValue('NAME'),
+      Blockly.Procedures.NAME_TYPE);
+
+  Blockly.Arduino.setups_['setup_particle_function_' + funcName] = "Particle.function(\"" + funcName + "\", " + funcName + ");";
+
+  var branch = Blockly.Arduino.statementToCode(this, 'STACK');
+  if (Blockly.Arduino.INFINITE_LOOP_TRAP) {
+    branch = Blockly.Arduino.INFINITE_LOOP_TRAP.replace(/%1/g,
+        '\'' + this.id + '\'') + branch;
+  }
+  var arg = Blockly.Arduino.variableDB_.getName(this.arguments_[0], Blockly.Variables.NAME_TYPE);
+  var code = 'int ' + funcName + '(String _' + arg + ') {\n' +
+  	  '  int ' + arg + " = _" + arg + ".toInt();\n" +
+      branch + 
+      '  return 0;\n' +
+      '}\n';
+  code = Blockly.Arduino.scrub_(this, code);
+  Blockly.Arduino.definitions_[funcName] = code;
+
+  return null;
+}
+
+Blockly.Arduino.particle_publish = function() {
+	var name = this.getFieldValue('NAME');
+	return 'Particle.publish("' + name + '");\n';
+}
+
+Blockly.Arduino.particle_publish_arg = function() {
+	var name = this.getFieldValue('NAME');
+	var value = Blockly.Arduino.valueToCode(this, 'ARG', Blockly.Arduino.ORDER_ATOMIC);
+	return 'Particle.publish("' + name + '", ' + value + ');\n';
+}
